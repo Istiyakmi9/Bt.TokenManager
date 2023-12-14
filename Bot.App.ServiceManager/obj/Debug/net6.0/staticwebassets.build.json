@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "Szgap1EbjmtAFiaib1vOyCZSlswDp6MJprEtGtXrv7c=",
+  "Source": "Bot.App.ServiceManager",
+  "BasePath": "_content/Bot.App.ServiceManager",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
