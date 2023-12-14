@@ -10,6 +10,7 @@ bin
 **/bin/*
 obj
 **/obj/*
+**/bin/*
 packages
 **/.vs/*
 **/Documents/Bills
