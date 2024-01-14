@@ -2,7 +2,7 @@
 {
     public class Constants
     {
-        public static string CompanyCode = string.Empty;
-        public static string JBot = string.Empty;
+        public static string CompanyCode = "CompanyCode";
+        public static string JBot = "JBot";
     }
 }
