@@ -54,7 +54,9 @@ namespace Bot.App.ServiceManager.Service
                 throw new ArgumentException("Invalid company code used");
             }
 
-            return await Task.FromResult(_jwtTokenConfig.GetJwtSettingsDetail(values[0].ToLower()));
+            var jwtSetting = await Task.FromResult(_jwtTokenConfig.GetJwtSettingsDetail(values[0].ToLower()));
+            jwtSetting.CompanyCode = values[1];
+            return jwtSetting;
         }
 
         public async Task<string> GenerateAccessToken(RequestToken requestToken)
@@ -73,7 +75,7 @@ namespace Bot.App.ServiceManager.Service
                     new Claim(ClaimTypes.Role, requestToken.Role!),
                     new Claim(JwtRegisteredClaimNames.Aud, num.ToString()),
                     new Claim(ClaimTypes.Version, "1.0.0"),
-                    new Claim(Constants.CompanyCode, requestToken.CompanyCode!),
+                    new Claim(Constants.CompanyCode, jwtSetting.CompanyCode!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(Constants.JBot, JsonConvert.SerializeObject(requestToken))
                 }),
