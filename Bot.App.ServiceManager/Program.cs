@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.Configure<JwtSetting>(o => builder.Configuration.GetSection(nameof(JwtSetting)).Bind(o));
+builder.Services.Configure<JwtTokenConfig>(o => builder.Configuration.GetSection(nameof(JwtTokenConfig)).Bind(o));
 builder.Services.AddScoped<TokenManagerService>();
 builder.Services.AddControllers();
 
