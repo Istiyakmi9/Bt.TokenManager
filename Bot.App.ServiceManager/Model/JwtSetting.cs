@@ -12,12 +12,15 @@
                 case "ems":
                     JwtSettings!.TryGetValue("emstum", out jwtSetting!);
                     break;
-                case "bh":
+                case "hb":
                     JwtSettings!.TryGetValue("hiringbell", out jwtSetting!);
                     break;
-                default:
+                case "btcm":
                     JwtSettings!.TryGetValue("generic", out jwtSetting!);
                     break;
+                default:
+                    // JwtSettings!.TryGetValue("generic", out jwtSetting!);
+                    throw new UnauthorizedAccessException("Token code not found. Please provide code to generate token.");
             }
 
             return jwtSetting;

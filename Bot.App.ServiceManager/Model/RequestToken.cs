@@ -2,7 +2,7 @@
 {
     public class RequestToken
     {
-        public string? UserDetail { set; get; }
+        // public string? UserDetail { set; get; }
         public long UserId { set; get; }
         public string? Email { set; get; }
         public string? CompanyCode { set; get; }
