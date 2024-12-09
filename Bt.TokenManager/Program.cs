@@ -9,11 +9,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<TokenManagerService>();
 builder.Services.AddControllers();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton<IFetchGithubConfigurationService>(x =>
     FetchGithubConfigurationService.getInstance(ApplicationNames.EMSTUM)
 );
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
+}
 
 // Configure the HTTP request pipeline.
 

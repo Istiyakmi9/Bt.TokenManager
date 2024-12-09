@@ -50,16 +50,8 @@ namespace Bt.TokenManager.Service
 
         private async Task<PublicKeyDetail> GetTokenKey(string companyCode)
         {
-            var values = companyCode.Split("-");
-            if (values.Length < 2)
-            {
-                throw new ArgumentException("Invalid company code used");
-            }
-
             var publicKeys = _fetchGithubConfigurationService.GetPublicKeyConfiguration();
-            // publicKeys.CompanyCode = values[1];
-
-            // var jwtSetting = await Task.FromResult(_jwtTokenConfig.GetJwtSettingsDetail(values[0].ToLower()));
+            publicKeys.CompanyCode = companyCode;
             return await Task.FromResult(publicKeys);
         }
 
