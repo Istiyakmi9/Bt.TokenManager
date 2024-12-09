@@ -1,8 +1,8 @@
-﻿using Bot.App.ServiceManager.Model;
-using Bot.App.ServiceManager.Service;
+﻿using Bt.TokenManager.Model;
+using Bt.TokenManager.Service;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bot.App.ServiceManager.Controllers
+namespace Bt.TokenManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

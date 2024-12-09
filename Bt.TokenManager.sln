@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bt.TokenManager", "Bt.TokenManager\Bt.TokenManager.csproj", "{C5C56127-C19D-40EA-9A7B-65075FB58CC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5C56127-C19D-40EA-9A7B-65075FB58CC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C56127-C19D-40EA-9A7B-65075FB58CC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C56127-C19D-40EA-9A7B-65075FB58CC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C56127-C19D-40EA-9A7B-65075FB58CC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17F60D4C-B6DC-4600-81BC-89D8880CB6C3}
+	EndGlobalSection
+EndGlobal

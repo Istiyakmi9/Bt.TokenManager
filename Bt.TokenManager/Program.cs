@@ -1,14 +1,17 @@
-using Bot.App.ServiceManager.Model;
-using Bot.App.ServiceManager.Service;
-using Microsoft.Extensions.Configuration;
+using Bt.Lib.Common.Service.Configserver;
+using Bt.Lib.Common.Service.Model;
+using Bt.TokenManager.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.Configure<JwtTokenConfig>(o => builder.Configuration.GetSection(nameof(JwtTokenConfig)).Bind(o));
 builder.Services.AddScoped<TokenManagerService>();
 builder.Services.AddControllers();
+
+builder.Services.AddSingleton<IFetchGithubConfigurationService>(x =>
+    FetchGithubConfigurationService.getInstance(ApplicationNames.EMSTUM)
+);
 
 var app = builder.Build();
 

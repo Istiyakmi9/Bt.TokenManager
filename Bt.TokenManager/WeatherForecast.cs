@@ -1,4 +1,4 @@
-namespace Bot.App.ServiceManager
+namespace Bt.TokenManager
 {
     public class WeatherForecast
     {

@@ -1,6 +1,7 @@
+using Bt.TokenManager;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bot.App.ServiceManager.Controllers
+namespace Bt.TokenManager.Controllers
 {
     [ApiController]
     [Route("[controller]")]

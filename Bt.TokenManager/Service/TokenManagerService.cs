@@ -1,4 +1,6 @@
-﻿using Bot.App.ServiceManager.Model;
+﻿using Bt.Lib.Common.Service.Configserver;
+using Bt.Lib.Common.Service.Model;
+using Bt.TokenManager.Model;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -6,21 +8,21 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Bot.App.ServiceManager.Service
+namespace Bt.TokenManager.Service
 {
     public class TokenManagerService
     {
-        private readonly JwtTokenConfig _jwtTokenConfig;
+        private readonly IFetchGithubConfigurationService _fetchGithubConfigurationService;
 
-        public TokenManagerService(IOptions<JwtTokenConfig> options)
+        public TokenManagerService(IFetchGithubConfigurationService fetchGithubConfigurationService)
         {
-            _jwtTokenConfig = options.Value;
+            _fetchGithubConfigurationService = fetchGithubConfigurationService;
         }
 
         public async Task<string> ReadJwtToken(string authorization, string companyCode)
         {
             string userId = string.Empty;
-            JwtSetting jwtSetting = await GetTokenKey(companyCode);
+            PublicKeyDetail publicKeyDetail = await GetTokenKey(companyCode);
 
             if (!string.IsNullOrEmpty(authorization))
             {
@@ -28,15 +30,15 @@ namespace Bot.App.ServiceManager.Service
                 if (!string.IsNullOrEmpty(token) && token != "null")
                 {
                     var handler = new JwtSecurityTokenHandler();
-                    handler.ValidateToken(token, new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    handler.ValidateToken(token, new TokenValidationParameters
                     {
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = false,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = jwtSetting.Issuer, //_configuration["jwtSetting:Issuer"],
-                        ValidAudience = jwtSetting.Issuer, //_configuration["jwtSetting:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.Key!))
+                        ValidIssuer = publicKeyDetail.Issuer,
+                        ValidAudience = publicKeyDetail.Issuer,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(publicKeyDetail.Key!))
                     }, out SecurityToken validatedToken);
 
                     var securityToken = handler.ReadToken(token) as JwtSecurityToken;
@@ -46,7 +48,7 @@ namespace Bot.App.ServiceManager.Service
             return userId;
         }
 
-        private async Task<JwtSetting> GetTokenKey(string companyCode)
+        private async Task<PublicKeyDetail> GetTokenKey(string companyCode)
         {
             var values = companyCode.Split("-");
             if (values.Length < 2)
@@ -54,9 +56,11 @@ namespace Bot.App.ServiceManager.Service
                 throw new ArgumentException("Invalid company code used");
             }
 
-            var jwtSetting = await Task.FromResult(_jwtTokenConfig.GetJwtSettingsDetail(values[0].ToLower()));
-            jwtSetting.CompanyCode = values[1];
-            return jwtSetting;
+            var publicKeys = _fetchGithubConfigurationService.GetPublicKeyConfiguration();
+            // publicKeys.CompanyCode = values[1];
+
+            // var jwtSetting = await Task.FromResult(_jwtTokenConfig.GetJwtSettingsDetail(values[0].ToLower()));
+            return await Task.FromResult(publicKeys);
         }
 
         public async Task<string> GenerateAccessToken(RequestToken requestToken)
@@ -65,26 +69,26 @@ namespace Bot.App.ServiceManager.Service
             var num = new Random().Next(1, 10);
 
             await ValidateTokenGeneratorRequest(requestToken);
-            JwtSetting jwtSetting = await GetTokenKey(requestToken.CompanyCode!);
+            PublicKeyDetail publicKeyDetail = await GetTokenKey(requestToken.CompanyCode!);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new System.Security.Claims.ClaimsIdentity(new Claim[] {
+                Subject = new ClaimsIdentity(new Claim[] {
                     new Claim(JwtRegisteredClaimNames.Sid, requestToken.UserId.ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, requestToken.Email!),
                     new Claim(ClaimTypes.Role, requestToken.Role!),
                     new Claim(JwtRegisteredClaimNames.Aud, num.ToString()),
                     new Claim(ClaimTypes.Version, "1.0.0"),
-                    new Claim(Constants.CompanyCode, jwtSetting.CompanyCode!),
+                    new Claim(Constants.CompanyCode, publicKeyDetail.CompanyCode),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(Constants.JBot, JsonConvert.SerializeObject(requestToken))
                 }),
 
                 // ----------- Expiry time at after what time token will get expired -----------------------------
-                Expires = DateTime.UtcNow.AddSeconds(jwtSetting.DefaulExpiryTimeInSeconds * 6),
+                Expires = DateTime.UtcNow.AddSeconds(publicKeyDetail.DefaulExpiryTimeInSeconds * 6),
 
                 SigningCredentials = new SigningCredentials(
-                                           new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.Key!)),
+                                           new SymmetricSecurityKey(Encoding.UTF8.GetBytes(publicKeyDetail.Key)),
                                            SecurityAlgorithms.HmacSha256
                                     )
             };

@@ -1,4 +1,4 @@
-﻿namespace Bot.App.ServiceManager.Model
+﻿namespace Bt.TokenManager.Model
 {
     public class UserDetail
     {
