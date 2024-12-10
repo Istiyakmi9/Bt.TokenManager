@@ -13,7 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IFetchGithubConfigurationService>(x =>
-    FetchGithubConfigurationService.getInstance(ApplicationNames.EMSTUM)
+    FetchGithubConfigurationService
+    .getInstance()
+    .Init(ApplicationNames.EMSTUM)
 );
 
 var app = builder.Build();

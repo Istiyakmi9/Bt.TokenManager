@@ -1,7 +1,6 @@
 ﻿using Bt.Lib.Common.Service.Configserver;
 using Bt.Lib.Common.Service.Model;
 using Bt.TokenManager.Model;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
@@ -50,7 +49,7 @@ namespace Bt.TokenManager.Service
 
         private async Task<PublicKeyDetail> GetTokenKey(string companyCode)
         {
-            var publicKeys = _fetchGithubConfigurationService.GetPublicKeyConfiguration();
+            var publicKeys = _fetchGithubConfigurationService.GetConfiguration<PublicKeyDetail>();
             publicKeys.CompanyCode = companyCode;
             return await Task.FromResult(publicKeys);
         }
