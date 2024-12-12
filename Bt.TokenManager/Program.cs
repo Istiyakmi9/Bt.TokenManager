@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IFetchGithubConfigurationService>(x =>
     FetchGithubConfigurationService
     .getInstance()
-    .Init(ApplicationNames.EMSTUM)
+    .Init(ApplicationNames.EMSTUM, builder.Environment)
 );
 
 var app = builder.Build();

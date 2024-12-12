@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bt.Lib.Common.Service" Version="1.0.15" />
+    <PackageReference Include="Bt.Lib.Common.Service" Version="1.0.21" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
